@@ -15,7 +15,7 @@ const setupExpress = () => {
     next();
   });
   app.use('/', index);
-  app.use('/api/v1/users', users);
+  app.use('/api/v1/tests', users);
 
   // GET routes.
   app.get('/', (req, res) => {
