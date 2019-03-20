@@ -1,48 +1,6 @@
 # FYP: API Server
 
-The Node.js server runs a MySQL database which is accessed through a [MySQL package](https://www.npmjs.com/package/mysql).
-
-Strings are escaped using an [SQL sanitization package](https://www.npmjs.com/package/sqlstring).
-
-## Database
-
-A MySQL database is used on the server.
-
-### Tables
-
-All tables are normalised in Boyce-Codd Normal form.
-
-#### Functions
-
-Note: This table is probably not necessary.
-
-| repository_id | commit_id | function_id |
-| ------------- | --------- | ----------- |
-| `string`      | `string`  | `string`    |
-
-#### Results
-
-Note: We might be able to combine the previous table and this one, replacing `job_id`.
-
-| job_id   | test_id  | timestamp | time      |
-| -------- | -------- | --------- | --------- |
-| `string` | `string` | `integer` | `integer` |
-
-Where:
-* `test_id` is a unique ID for the test.
-* `timestamp` is the Unix timestamp in milliseconds of when the test was run.
-* `time` is the number of milliseconds taken to execute the function.
-
-Primary key: `test_id`
-
-Constraints:
-* `time` > 0
-* `time` not `null`
-
-The `job_id` field is derived from:
-* Repository ID
-* Commit ID
-* Function ID
+The Node.js server runs a MongoDB database which is accessed through [Mongoose](https://npmjs.com/package/mongoose).
 
 ## API
 
@@ -56,4 +14,71 @@ The following header should be supplied to all API requests:
 
 #### Get Test Results
 
-`GET /api/v1/tests/:repository/:commit/:function`
+`GET /api/v1/<TODO>`
+
+## Benchmark Definition
+
+The following schema is defined in `benchmark.json`:
+``` js
+{
+  myFirstBenchmark: {
+    benchmark: Function, // The benchmark function itself
+    timeout: Number, // Milliseconds before abandoning the test [Default = 1000, Max = 20000]
+    runs: Number, // Number of times to run the test [Default = 1, Max = 10]
+    maxAttempts: Number // Number of times to attempt the runs [Default = 1, Max = 10]
+  }
+}
+```
+
+## MongoDB
+
+Alternative:
+``` json
+"tests": [
+  {
+    "testId": "7490uf",
+    "ownerId": 123,
+    "repositoryId": 13241320,
+    "commitId": "1023481-2384",
+    "workerId": "worker2",
+    "queuedAt": 2349752034,
+    "startTime": 12232342398,
+    "endTime": 26312364987,
+    "globalErrors": [{
+      "stage": "verify unique benchmarks",
+      "error": "duplicate IDs"
+    }],
+    "benchmarks": [
+      {
+        "benchmarkId": "errors-syntax-error",
+        "filepath": "src/utils/errors.benchmark.js",
+        "error": {
+          "error": "syntax error at line 127",
+          "stage": "get exports"
+        }
+      },
+      {
+        "benchmarkId": "utils-add-numbers",
+        "filepath": "src/utils/utils.benchmark.js",
+        "lineNumber": 126,
+        "benchmarkDefinition": {
+          "runs": 3,
+          "maxAttempts": 2,
+          "timeout": 5000
+        },
+        "attempts": [{
+          "runs": [
+            {
+              "result": 6,
+              "time": 1230192830
+            },
+            {
+              "error": "timed out"
+            }
+          ]
+        }]
+      }
+    ]
+  }
+]
+```
