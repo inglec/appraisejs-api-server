@@ -4,6 +4,7 @@ const { storeTest } = require('../../src/mongoDB/store');
 const { queryRepository } = require('../../src/mongoDB/query');
 
 const { genTest } = require('./data/generate');
+const sampleResults = require('./data/sample_results');
 const { connectToDatabase, dropDatabase } = require('./test');
 
 const logger = createLogger('appraisejs:test');
@@ -17,8 +18,9 @@ beforeAll(() => (
 ));
 
 describe('storeTest', () => {
-  test('stores test', () => storeTest(genTest(repositoryId)));
-  test('stores another test', () => storeTest(genTest(repositoryId)));
+  test('stores test results', () => storeTest(genTest(repositoryId)));
+  test('stores more test results', () => storeTest(genTest(repositoryId)));
+  test('stores sample results', () => storeTest(sampleResults));
 });
 
 describe('queryRepository', () => {

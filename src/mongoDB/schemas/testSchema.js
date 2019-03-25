@@ -2,7 +2,7 @@ const { Mixed, Schema } = require('mongoose');
 
 const error = {
   stage: { type: String, required: true },
-  error: { type: String, required: true },
+  errs: [{ type: String, required: true }],
 };
 
 const attempt = {
@@ -23,15 +23,15 @@ const benchmarkDefinition = {
 };
 
 const benchmark = {
-  benchmarkId: { type: String, required: true, unique: true },
+  benchmarkId: { type: String, required: true },
   filepath: { type: String, required: true },
   benchmarkDefinition: { type: benchmarkDefinition, required: false },
-  lineNumber: { type: Number, required: true },
+  lineNumber: { type: Number, required: false }, // TODO: Make required
   attempts: {
     type: [attempt],
     required: true,
   },
-  error: { type: error, required: false },
+  errs: [error],
 };
 
 const testSchema = new Schema({
@@ -43,7 +43,7 @@ const testSchema = new Schema({
   queuedAt: { type: Number, required: true },
   startTime: { type: Number, required: true },
   endTime: { type: Number, required: true },
-  globalErrors: [error],
+  errs: [error],
   benchmarks: [benchmark],
 });
 

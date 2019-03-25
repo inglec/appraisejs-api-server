@@ -28,7 +28,7 @@ const genStageErrors = (amount) => {
   for (let i = 0; i < amount; i += 1) {
     stageErrors.push({
       stage: uuidShort(),
-      error: getRandomValue(errors),
+      errs: [getRandomValue(errors)],
     });
   }
   return stageErrors;
@@ -71,7 +71,7 @@ const getBenchmarks = (amount) => {
       : {
         error: {
           stage: uuidShort(),
-          error: getRandomValue(errors),
+          errs: [getRandomValue(errors)],
         },
       };
 
@@ -97,7 +97,7 @@ const genTest = (repositoryId = randomNumber(), commitId = uuidv4()) => {
     queuedAt: time - 100000,
     startTime: time - 50000,
     endTime: time,
-    globalErrors: genStageErrors(randomNumber(3)),
+    errs: genStageErrors(randomNumber(3)),
     benchmarks: getBenchmarks(randomNumber(1, 10)),
   };
 };

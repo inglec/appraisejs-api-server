@@ -18,12 +18,19 @@ const setupExpress = () => {
     const { body, method, originalUrl } = req;
     logger.debug(method, originalUrl, body);
 
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      ['X-Requested-With', 'Content-Type', 'Accept'].join(', '),
+    );
+
     next();
   });
 
   app.get('/', (req, res) => res.send('test'));
 
-  app.get('/repository', (req, res) => {
+  app.get('/tests', (req, res) => {
     const { repositoryId } = req.query;
 
     if (!repositoryId) {
